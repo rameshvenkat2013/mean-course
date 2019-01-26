@@ -1,0 +1,9 @@
+<mat-card>    
+<mat-form-field>
+    <input matInput type="text" id="postheader" value="" [(ngModel)]="UserHeading" placeholder="Heading"/><br /><br />
+</mat-form-field>
+    <mat-form-field>
+            <textarea matInput rows="5" placeholder="Posts" [(ngModel)]="UserPost"></textarea>
+    </mat-form-field>
+    <button color="primary" mat-raised-button (click)="onPOSTAdd()">Save the Post</button>
+</mat-card>
