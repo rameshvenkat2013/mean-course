@@ -1,9 +1,14 @@
-<mat-card>    
-<mat-form-field>
-    <input matInput type="text" id="postheader" value="" [(ngModel)]="UserHeading" placeholder="Heading"/><br /><br />
-</mat-form-field>
+<mat-card>
+<form (submit)="onPOSTAdd(postForm)" #postForm="ngForm">
     <mat-form-field>
-            <textarea matInput rows="5" placeholder="Posts" [(ngModel)]="UserPost"></textarea>
+        <input matInput type="text" name="heading" id="postheader" 
+        ngModel required placeholder="Heading" #title="ngModel"/><br /><br />
+        <mat-error *ngIf="title.invalid">Please enter the Post Title</mat-error>  
     </mat-form-field>
-    <button color="primary" mat-raised-button (click)="onPOSTAdd()">Save the Post</button>
+    <mat-form-field>
+            <textarea matInput rows="5" name="content" placeholder="Posts" #content="ngModel" ngModel required></textarea>
+            <mat-error *ngIf="content.invalid">Please enter the Post Content</mat-error>
+    </mat-form-field>
+    <button color="primary" type="submit" mat-raised-button>Save the Post</button>
+</form>
 </mat-card>
