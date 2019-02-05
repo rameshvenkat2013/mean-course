@@ -5,6 +5,10 @@ mat-card{
 
 
 mat-form-field,
-textarea, input{
+textarea, input{ 
     width:100%;
+}
+
+mat-spinner{
+    margin:auto;
 }

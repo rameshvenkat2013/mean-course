@@ -16,6 +16,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         { header : 'Second Post', Content : 'some dummy second content' },
         { header : 'Third Post', Content : 'some dummy third content' }*/
     ];
+    isLoading = false;
 
     private postsSub: Subscription;
 
@@ -23,7 +24,9 @@ export class PostListComponent implements OnInit, OnDestroy {
 
     ngOnInit(){
         this.postsService.getPosts();
+        this.isLoading = true;
         this.postsSub = this.postsService.getPostUpdateListener().subscribe((posts: Post[]) => {
+            this.isLoading = false;
             this.posts = posts;
         });
     }
@@ -32,10 +35,6 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.postsService.deletePost(postId);
     }
     
-    onEdit(postId: string){        
-        this.postsService.editPost(postId);
-    }
-
     ngOnDestroy(){
         this.postsSub.unsubscribe();
     }
