@@ -28,28 +28,45 @@ const storage = multer.diskStorage({
 });
 
 router.post('', multer({storage: storage}).single('image'), (req,res,next)=> {
+    const url = req.protocol + '://' + req.get('host');
     const post = new Post({
         header: req.body.header,
         Content: req.body.Content,
+        imagePath: url + '/images/' + req.file.filename
     });
-    post.save().then(createdPostId => {
-        console.log(post);
+    post.save().then(createdPost => {
+        //console.log(post);
         //console.log(mongoose);        
         res.status(201).json({
             message : "Post added successfully!!",
-            postId : createdPostId._id
+            //postId : createdPostId._id
+            post : {
+                    ...createdPost,
+                    id: createdPost._id,
+                    /*header: createdPost.header,
+                    content: createdPost.Content,
+                    imagePath: createdPost.imagePath*/
+                }
         });
-    });        
+    });
 });
 
 
-router.put('/:id', (req,res,next)=> {
+router.put('/:id', multer({storage: storage}).single('image'), (req,res,next)=> {
+    let imagePath = req.body.imagePath;
+    if(req.file){
+        const url = req.protocol + "://" + req.get('host');
+        imagePath = url + "/images/" + req.file.filename;
+    }
 const post = new Post({
     _id: req.body.id,
     header: req.body.header,
     Content: req.body.Content,
+    imagePath: imagePath
 });
-Post.updateOne({_id:req.params.id}, post).then(createdPostId => {        
+//console.log(req);
+//return false;
+Post.updateOne({_id:req.params.id}, post).then(createdPostId => {
     res.status(200).json({
         message : "Post Updated successfully!!",
         postId : createdPostId._id
@@ -84,9 +101,19 @@ const posts = [
 
 */
 
-Post.find()
-.then(documents => {
-    console.log(documents);
+const pageSize = +req.query.pageSize;
+    const currentPage = +req.query.page;
+    /**
+     * + sign is used to typecast data into integer
+     */
+    const postQuery = Post.find();
+    if(pageSize && currentPage){
+        postQuery.skip(pageSize * (currentPage - 1))
+        .limit(pageSize);
+    }
+
+    postQuery.then(documents => {
+    //console.log(documents);
     res.status(200).json({
         message : "Post retrieved successfully!!",
         posts: documents
@@ -99,7 +126,7 @@ Post.find()
 
 router.delete('/:id', (req,res,next) => {
 Post.deleteOne({_id: req.params.id}).then(result => {
-    console.log(result);
+    //console.log(result);
     res.status(201).json({
         message : "Post deleted successfully!!"
     });

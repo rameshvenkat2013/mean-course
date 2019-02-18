@@ -44,10 +44,13 @@ export class PostCreateComponent implements OnInit{
                     this.isLoading = false;
                     this.post = {id: postData._id,                                 
                                 header:postData.header,
-                                Content:postData.Content};
+                                Content:postData.Content,
+                                imagePath: postData.imagePath
+                            };
                     this.form.setValue({
                             'header':this.post.header, 
-                            'content': this.post.Content
+                            'content': this.post.Content,
+                            image: this.post.imagePath
                         });
                 });
             }else{
@@ -83,9 +86,11 @@ export class PostCreateComponent implements OnInit{
             );
         }else if(this.mode == 'edit'){
             this.postsService.updatePost(
+                this.postId,
                 this.form.value.header,
                 this.form.value.content,
-                this.postId);
+                this.form.value.image
+                );
         }
          
          this.form.reset();

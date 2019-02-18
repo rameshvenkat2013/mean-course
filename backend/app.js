@@ -1,10 +1,11 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const postsRoutes = require('./routes/posts');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mongoToDoApp')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mongoToDoApp', { useNewUrlParser: true })
 .then(() => {
     console.log('MongoDb is connected');
 }).catch(() => {
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mongoToDo
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use('/images',express.static(path.join('backend/images')));
 
 app.use((req,res,next)=> {
     res.setHeader("Access-Control-Allow-Origin","*");
