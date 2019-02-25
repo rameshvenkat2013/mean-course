@@ -107,16 +107,26 @@ const pageSize = +req.query.pageSize;
      * + sign is used to typecast data into integer
      */
     const postQuery = Post.find();
+    let fetchedPosts;
     if(pageSize && currentPage){
         postQuery.skip(pageSize * (currentPage - 1))
         .limit(pageSize);
     }
 
     postQuery.then(documents => {
-    //console.log(documents);
+        fetchedPosts = documents;
+        return Post.count();
+    /*console.log(documents);
     res.status(200).json({
         message : "Post retrieved successfully!!",
         posts: documents
+    });
+    */
+}).then(count => {
+    res.status(200).json({
+        message : "Post retrieved successfully!!",
+        posts: fetchedPosts,
+        maxPosts: count
     });
 })
 .catch();
