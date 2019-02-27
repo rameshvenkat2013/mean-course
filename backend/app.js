@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const postsRoutes = require('./routes/posts');
+const userRoutes = require('./routes/user');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mongoToDoApp', { useNewUrlParser: true })
 .then(() => {
@@ -25,5 +26,6 @@ app.use((req,res,next)=> {
 });
 
 app.use("/api/posts", postsRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;

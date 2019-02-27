@@ -1,8 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-//import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { 
   MatInputModule,
@@ -22,6 +21,8 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { PostsService } from './posts/post.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from '../app-routing.module';
+import { LoginComponent } from './auth/sign_in/login.component';
+import { SignupComponent } from './auth/sign_up/signup.component';
 
 
 @NgModule({
@@ -29,12 +30,14 @@ import { AppRoutingModule } from '../app-routing.module';
     AppComponent,
     PostCreateComponent,
     PostListComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    //FormsModule,
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatInputModule,
