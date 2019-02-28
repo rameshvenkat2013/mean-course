@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const Post = require('../models/post')
+const userAuth = require('../middleware/user-auth');
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ const storage = multer.diskStorage({
     }
 });
 
-router.post('', multer({storage: storage}).single('image'), (req,res,next)=> {
+router.post('', userAuth, multer({storage: storage}).single('image'), (req,res,next)=> {
     const url = req.protocol + '://' + req.get('host');
     const post = new Post({
         header: req.body.header,
@@ -52,7 +53,7 @@ router.post('', multer({storage: storage}).single('image'), (req,res,next)=> {
 });
 
 
-router.put('/:id', multer({storage: storage}).single('image'), (req,res,next)=> {
+router.put('/:id', userAuth, multer({storage: storage}).single('image'), (req,res,next)=> {
     let imagePath = req.body.imagePath;
     if(req.file){
         const url = req.protocol + "://" + req.get('host');
@@ -66,12 +67,12 @@ const post = new Post({
 });
 //console.log(req);
 //return false;
-Post.updateOne({_id:req.params.id}, post).then(createdPostId => {
-    res.status(200).json({
-        message : "Post Updated successfully!!",
-        postId : createdPostId._id
+    Post.updateOne({_id:req.params.id}, post).then(createdPostId => {
+        res.status(200).json({
+            message : "Post Updated successfully!!",
+            postId : createdPostId._id
+        });
     });
-});        
 });
 
 router.get('/:id', (req,res,next) => {
@@ -134,13 +135,13 @@ const pageSize = +req.query.pageSize;
 
 });
 
-router.delete('/:id', (req,res,next) => {
-Post.deleteOne({_id: req.params.id}).then(result => {
-    //console.log(result);
-    res.status(201).json({
-        message : "Post deleted successfully!!"
+router.delete('/:id', userAuth, (req,res,next) => {
+    Post.deleteOne({_id: req.params.id}).then(result => {
+        //console.log(result);
+        res.status(201).json({
+            message : "Post deleted successfully!!"
+        });
     });
-});
 });
 
 

@@ -19,10 +19,11 @@ import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { PostsService } from './posts/post.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from '../app-routing.module';
 import { LoginComponent } from './auth/sign_in/login.component';
 import { SignupComponent } from './auth/sign_up/signup.component';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { SignupComponent } from './auth/sign_up/signup.component';
     HttpClientModule,
     MatPaginatorModule
   ],
-  providers: [PostsService],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+//  providers: [PostsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
